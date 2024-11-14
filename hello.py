@@ -21,7 +21,7 @@ if __name__ == "__main__":
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(hostname, username=username, password=password)
 
-    stdin, stdout, stderr = client.exec_command("cd /dados3/CURSO/grupo1; mkdir teste")
+    stdin, stdout, stderr = client.exec_command("ls")
 
     output = stdout.read().decode()
 
