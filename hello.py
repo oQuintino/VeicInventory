@@ -1,30 +1,20 @@
-from flask import Flask
+from flask import Flask, render_template
+
+import wrf_service
 
 app = Flask(__name__)
 
+
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def main_page():
+    return render_template("index.html")
+
+
+def main():
+    wrf = wrf_service.SSHWRFService()
+
+    wrf.connect_to()
+
 
 if __name__ == "__main__":
-    import os
-    import paramiko
-    from dotenv import load_dotenv
-
-    load_dotenv()
-
-    hostname = os.getenv("SSH_HOST")
-    username = os.getenv("SSH_NAME")
-    password = os.getenv("SSH_PASS")
-
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(hostname, username=username, password=password)
-
-    stdin, stdout, stderr = client.exec_command("ls")
-
-    output = stdout.read().decode()
-
-    print(output)
-
-    # app.run(debug=True)
+    main()
