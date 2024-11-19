@@ -1,0 +1,16 @@
+arch:
+  - amd64
+language: python
+python:
+  - "3.11"
+# Only send notifications on new failures
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+install:
+  - pip install pipenv
+  - pipenv install --dev
+script:
+  - ruff check
+  - ruff format
