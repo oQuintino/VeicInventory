@@ -11,6 +11,7 @@ paramiko = "*"
 [dev-packages]
 ruff = "*"
 bandit = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.11"
