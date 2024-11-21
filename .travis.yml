@@ -12,5 +12,7 @@ install:
   - pip install pipenv
   - pipenv install --dev
 script:
+  - pytest
   - ruff check
   - ruff format
+  - ruff clean
