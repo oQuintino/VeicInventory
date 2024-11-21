@@ -1,5 +1,0 @@
-#!D:\Users\Public\Documents\arquivos\Trabalhos\College\IFSC\Projeto de Pesquisa WRF\wrf stuff\web-ui wrf\VeicInventory\myenv\Scripts\python.exe
-
-from f90nml import cli
-
-cli.parse()
