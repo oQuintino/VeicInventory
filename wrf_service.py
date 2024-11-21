@@ -24,15 +24,15 @@ class SSHWRFService:
 
         ssh_policy = AutoAddPolicy()
 
-        client = SSHClient()
-        client.set_missing_host_key_policy(ssh_policy)
-        client.connect(hostname, username=username, password=password)
+        with SSHClient() as client:
+            client.set_missing_host_key_policy(ssh_policy)
 
-        command: LiteralString = "ls"
+            client.connect(hostname, username=username, password=password)
 
-        stdin, stdout, stderr = client.exec_command(command)
+            command: LiteralString = "ls"
 
-        output = stdout.read().decode()
-        print(output)
+            stdin, stdout, stderr = client.exec_command(command)
 
-        client.close()
+            output = stdout.read().decode()
+
+            print(output)
