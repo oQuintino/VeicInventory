@@ -1,6 +1,5 @@
-from flask import Flask, render_template
-
 import wrf_service
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
