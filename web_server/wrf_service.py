@@ -1,26 +1,22 @@
-from os import getenv
-from typing import LiteralString
+from typing import LiteralString, NamedTuple
 
-from dotenv import load_dotenv
 from paramiko import AutoAddPolicy, SSHClient
 
 
+class ConnectionSettings(NamedTuple):
+    hostname: str
+    username: str | None
+    password: str | None
+
+
 class SSHWRFService:
-    def __init__(self):
-        pass
+    def __init__(self, settings: ConnectionSettings):
+        self.settings = settings
 
     def connect_to(self):
-        dotenv_is_loaded = load_dotenv()
+        hostname, username, password = self.settings
 
-        if not dotenv_is_loaded:
-            raise Exception("Missing Dotenv")
-
-        hostname = getenv("SSH_HOST")
-        username = getenv("SSH_USER")
-        password = getenv("SSH_PASS")
-
-        if hostname is None:
-            raise Exception("Missing hostname")
+        command: LiteralString = "ls"
 
         ssh_policy = AutoAddPolicy()
 
@@ -28,8 +24,6 @@ class SSHWRFService:
             client.set_missing_host_key_policy(ssh_policy)
 
             client.connect(hostname, username=username, password=password)
-
-            command: LiteralString = "ls"
 
             stdin, stdout, stderr = client.exec_command(command)
 
