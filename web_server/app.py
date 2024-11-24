@@ -1,4 +1,4 @@
-import wrf_service
+import wrf_container
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -10,7 +10,25 @@ def main_page():
 
 
 def main():
-    wrf = wrf_service.SSHWRFService()
+    from dotenv import load_dotenv
+
+    could_load_dotenv = load_dotenv()
+
+    if not could_load_dotenv:
+        raise Exception("Missing Dotenv")
+
+    container = wrf_container.WRFContainer()
+
+    config = container.config
+
+    config.hostname.from_env("SSH_HOST")
+    config.username.from_env("SSH_USER")
+    config.password.from_env("SSH_PASS")
+
+    if config.hostname is None:
+        raise Exception("Missing hostname")
+
+    wrf = container.service()
 
     wrf.connect_to()
 
