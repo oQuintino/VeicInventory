@@ -20,12 +20,9 @@ def main():
 
     config = container.config
 
-    config.hostname.from_env("SSH_HOST")
+    config.hostname.from_env("SSH_HOST", required=True)
     config.username.from_env("SSH_USER")
     config.password.from_env("SSH_PASS")
-
-    if config.hostname is None:
-        raise Exception("Missing hostname")
 
     wrf = container.service()
 
