@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect
-import json
+from flask import Flask, render_template, request
 import f90nml
 import os
 import paramiko
@@ -39,28 +38,34 @@ def index():
 
     return '''
     <script>
-    alert("dados enviados com sucesso")
+    alert("dados recebidos com sucesso")
     window.location.replace("/")
     </script>'''
 
+@app.route("/sendfile", methods=['GET'])
+def send_file():
 
-if __name__ == "__main__":
+    load_dotenv()
 
+    hostname = os.getenv("SSH_HOST")
+    username = os.getenv("SSH_NAME")
+    password = os.getenv("SSH_PASS")
+    local_file_path = os.getenv("LOCAL_FILE")
+    remote_file_path = os.getenv("REMOTE_PATH")
 
-    # load_dotenv()
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.connect(hostname, username=username, password=password)
 
-    # hostname = os.getenv("SSH_HOST")
-    # username = os.getenv("SSH_NAME")
-    # password = os.getenv("SSH_PASS")
+    sftp = client.open_sftp()
+    sftp.put(local_file_path, remote_file_path)
 
-    # client = paramiko.SSHClient()
-    # client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    # client.connect(hostname, username=username, password=password)
+    stdin, stdout, stderr = client.exec_command("cd /dados3/CURSO/grupo1/test; ls")
 
-    # stdin, stdout, stderr = client.exec_command("cd /dados3/CURSO/grupo1; ls")
+    output = stdout.read().decode()
 
-    # output = stdout.read().decode()
+    print(output)
 
-    # print(output)
+    return output
 
-    app.run(debug=True)
+app.run(debug=True)
