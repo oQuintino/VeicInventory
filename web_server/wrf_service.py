@@ -1,13 +1,29 @@
 from os import PathLike
 from typing import LiteralString, NamedTuple
 
-from paramiko import AutoAddPolicy, SSHClient
+from paramiko import AutoAddPolicy, SFTPClient, SSHClient, Transport
 
 
 class ConnectionSettings(NamedTuple):
     hostname: str
     username: str | None
     password: str | None
+
+
+class SFTPNamelistSender:
+    def __init__(self, namelist_file_path: PathLike[str]):
+        self.__file_path = namelist_file_path
+
+    def send_namelist_through(self, a_stablished_protocol: Transport):
+        sftp = SFTPClient.from_transport(a_stablished_protocol)
+
+        if sftp is None:
+            return
+
+        path_string = str(self.__file_path)
+
+        with sftp:
+            sftp.put(".", path_string)
 
 
 class SSHWRFService:
