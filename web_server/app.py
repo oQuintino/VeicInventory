@@ -1,4 +1,5 @@
 import wrf_container
+from dotenv import load_dotenv
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -10,8 +11,6 @@ def main_page():
 
 
 def main():
-    from dotenv import load_dotenv
-
     could_load_dotenv = load_dotenv()
 
     if not could_load_dotenv:
