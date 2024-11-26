@@ -18,6 +18,9 @@ class SSHWRFService:
     def connect_to(self):
         hostname, username, password = self.__settings
 
+        if not hostname:
+            raise Exception("Missing hostname")
+
         command: LiteralString = "ls"
 
         ssh_policy = AutoAddPolicy()
