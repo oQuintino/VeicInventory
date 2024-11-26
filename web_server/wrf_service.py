@@ -1,13 +1,7 @@
 from os import PathLike
-from typing import LiteralString, NamedTuple
+from typing import NamedTuple
 
-from paramiko import AutoAddPolicy, SFTPClient, SSHClient, Transport
-
-
-class ConnectionSettings(NamedTuple):
-    hostname: str
-    username: str | None
-    password: str | None
+from paramiko import SFTPClient, Transport
 
 
 class SFTPNamelistSender:
@@ -26,10 +20,18 @@ class SFTPNamelistSender:
             sftp.put(".", path_string)
 
 
+class ConnectionSettings(NamedTuple):
+    hostname: str
+    username: str
+    password: str | None
+
+
 class SSHWRFService:
-    def __init__(self, settings: ConnectionSettings, namelist_file_path: PathLike[str]):
+    def __init__(
+        self, settings: ConnectionSettings, namelist_sender: SFTPNamelistSender
+    ):
         self.__settings = settings
-        self.__file_path = namelist_file_path
+        self.__sender = namelist_sender
 
     def connect_to(self):
         hostname, username, password = self.__settings
@@ -37,17 +39,10 @@ class SSHWRFService:
         if not hostname:
             raise Exception("Missing hostname")
 
-        command: LiteralString = "ls"
+        if not username:
+            raise Exception("Missing username")
 
-        ssh_policy = AutoAddPolicy()
+        with Transport(hostname) as protocol:
+            protocol.connect(username=username, password=password)
 
-        with SSHClient() as client:
-            client.set_missing_host_key_policy(ssh_policy)
-
-            client.connect(hostname, username=username, password=password)
-
-            stdin, stdout, stderr = client.exec_command(command)
-
-            output = stdout.read().decode()
-
-            print(output)
+            self.__sender.send_namelist_through(protocol)
