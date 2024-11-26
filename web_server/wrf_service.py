@@ -1,3 +1,4 @@
+from os import PathLike
 from typing import LiteralString, NamedTuple
 
 from paramiko import AutoAddPolicy, SSHClient
@@ -10,11 +11,12 @@ class ConnectionSettings(NamedTuple):
 
 
 class SSHWRFService:
-    def __init__(self, settings: ConnectionSettings):
-        self.settings = settings
+    def __init__(self, settings: ConnectionSettings, namelist_file_path: PathLike[str]):
+        self.__settings = settings
+        self.__file_path = namelist_file_path
 
     def connect_to(self):
-        hostname, username, password = self.settings
+        hostname, username, password = self.__settings
 
         command: LiteralString = "ls"
 

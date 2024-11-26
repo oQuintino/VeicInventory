@@ -15,4 +15,5 @@ class WRFContainer(containers.DeclarativeContainer):
     service = providers.Singleton(
         wrf_service.SSHWRFService,
         settings=connection_settings,
+        namelist_file_path="/",
     )
