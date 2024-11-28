@@ -6,14 +6,14 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
 
     namelist_paths = providers.Singleton(
-        wrf_service.NamelistPaths,
+        wrf_service.NamelistFilePaths,
         local_path=config.namelist_local_path,
         remote_path=config.namelist_remote_path,
     )
 
     namelist_sender = providers.Singleton(
         wrf_service.SFTPNamelistSender,
-        namelist_file_paths=namelist_paths,
+        namelist_paths=namelist_paths,
     )
 
     connection_settings = providers.Singleton(
