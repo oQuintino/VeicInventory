@@ -1,4 +1,4 @@
-import inventory_app_container
+import app_container
 from dotenv import load_dotenv
 
 
@@ -8,7 +8,7 @@ def main():
     if not could_load_dotenv:
         raise Exception("Missing Dotenv")
 
-    container = inventory_app_container.InventoryAppContainer()
+    container = app_container.InventoryAppContainer()
 
     config = container.config
 
