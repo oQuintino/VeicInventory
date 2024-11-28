@@ -4,6 +4,11 @@ from typing import NamedTuple
 from paramiko import SFTPClient, Transport
 
 
+class NamelistPaths(NamedTuple):
+    local_path: PathLike[str]
+    remote_path: PathLike[str]
+
+
 class SFTPNamelistSender:
     def __init__(self, namelist_file_path: PathLike[str]):
         self.__file_path = namelist_file_path
