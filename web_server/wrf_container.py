@@ -13,7 +13,7 @@ class WRFContainer(containers.DeclarativeContainer):
 
     namelist_sender = providers.Singleton(
         wrf_service.SFTPNamelistSender,
-        namelist_file_path="/",
+        namelist_file_paths=namelist_paths,
     )
 
     connection_settings = providers.Singleton(

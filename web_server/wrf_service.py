@@ -10,8 +10,8 @@ class NamelistPaths(NamedTuple):
 
 
 class SFTPNamelistSender:
-    def __init__(self, namelist_file_path: PathLike[str]):
-        self.__file_path = namelist_file_path
+    def __init__(self, namelist_file_paths: NamelistPaths):
+        self.__file_paths = namelist_file_paths
 
     def send_namelist_through(self, a_stablished_protocol: Transport):
         sftp = SFTPClient.from_transport(a_stablished_protocol)
@@ -19,10 +19,10 @@ class SFTPNamelistSender:
         if sftp is None:
             return
 
-        path_string = str(self.__file_path)
+        namelist_to_send, its_remote_path = map(str, self.__file_paths)
 
         with sftp:
-            sftp.put(".", path_string)
+            sftp.put(namelist_to_send, its_remote_path)
 
 
 class ConnectionSettings(NamedTuple):
