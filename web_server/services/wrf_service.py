@@ -17,7 +17,7 @@ class SFTPNamelistSender:
         sftp = SFTPClient.from_transport(a_stablished_protocol)
 
         if sftp is None:
-            return
+            raise Exception("Something went wrong while creating the sftp channel")
 
         namelist_to_send, its_remote_path = map(str, self.__file_paths)
 
