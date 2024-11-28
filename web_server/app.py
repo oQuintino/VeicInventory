@@ -1,4 +1,4 @@
-import wrf_container
+import inventory_app_container
 from dotenv import load_dotenv
 
 
@@ -8,7 +8,7 @@ def main():
     if not could_load_dotenv:
         raise Exception("Missing Dotenv")
 
-    container = wrf_container.WRFContainer()
+    container = inventory_app_container.InventoryAppContainer()
 
     config = container.config
 

@@ -1,8 +1,8 @@
-import wrf_service
 from dependency_injector import containers, providers
+from services import wrf_service
 
 
-class WRFContainer(containers.DeclarativeContainer):
+class InventoryAppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
 
     namelist_paths = providers.Singleton(
