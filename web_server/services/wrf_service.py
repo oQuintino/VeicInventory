@@ -14,15 +14,15 @@ class SFTPNamelistSender:
         self.__file_paths = namelist_paths
 
     def send_namelist_through(self, a_stablished_protocol: Transport):
-        sftp = SFTPClient.from_transport(a_stablished_protocol)
+        sftp_channel = SFTPClient.from_transport(a_stablished_protocol)
 
-        if sftp is None:
+        if sftp_channel is None:
             raise Exception("Could not create the sftp channel")
 
         namelist_to_send, its_remote_path = map(str, self.__file_paths)
 
-        with sftp:
-            sftp.put(namelist_to_send, its_remote_path)
+        with sftp_channel:
+            sftp_channel.put(namelist_to_send, its_remote_path)
 
 
 class ConnectionSettings(NamedTuple):
