@@ -8,6 +8,7 @@ flask = "*"
 python-dotenv = "*"
 paramiko = "*"
 dependency-injector = "*"
+f90nml = "*"
 
 [dev-packages]
 ruff = "*"
