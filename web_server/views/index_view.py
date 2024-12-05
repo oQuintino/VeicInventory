@@ -1,5 +1,6 @@
 import f90nml
 from flask import Blueprint, Flask, render_template, request
+from services import wrf_service
 
 NML_PARAMS = (
     "frac_veic1",
@@ -46,6 +47,9 @@ NML_PARAMS = (
 
 
 class IndexView:
+    def __init__(self, wrf_service: wrf_service.SSHWRFService):
+        self.__service = wrf_service
+
     def index(self):
         if request.method == "GET":
             return render_template("index.html", params=NML_PARAMS)
@@ -68,7 +72,12 @@ class IndexView:
         </script>"""
 
     def send_file(self):
-        return ""
+        self.__service.connect_to()
+
+        return """
+        <script>
+        alert("dados enviados")
+        </script>"""
 
     def add_to(self, mod: Blueprint | Flask):
         index_page = Blueprint("index", __name__)
