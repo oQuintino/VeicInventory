@@ -1,12 +1,11 @@
-from os import PathLike
 from typing import NamedTuple
 
 from paramiko import SFTPClient, Transport
 
 
 class NamelistFilePaths(NamedTuple):
-    local_path: PathLike[str]
-    remote_path: PathLike[str]
+    local_path: str
+    remote_path: str
 
 
 class SFTPNamelistSender:
@@ -19,7 +18,7 @@ class SFTPNamelistSender:
         if sftp_channel is None:
             raise Exception("Could not create the sftp channel")
 
-        namelist_to_send, its_remote_path = map(str, self.__file_paths)
+        namelist_to_send, its_remote_path = self.__file_paths
 
         with sftp_channel:
             sftp_channel.put(namelist_to_send, its_remote_path)
