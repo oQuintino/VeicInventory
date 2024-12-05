@@ -51,8 +51,6 @@ class IndexView:
             return render_template("index.html", params=NML_PARAMS)
 
         if request.method == "POST":
-            data = request.form
-
             data = request.form.to_dict()
 
             for key, value in data.items():
