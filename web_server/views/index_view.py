@@ -54,10 +54,7 @@ class IndexView:
             data = request.form.to_dict()
 
             for key, value in data.items():
-                if value.strip():
-                    data[key] = value
-                else:
-                    data[key] = "0"
+                data[key] = value if value.strip() else "0"
 
             namelist_group = {"emission_vehicles": data}
 
