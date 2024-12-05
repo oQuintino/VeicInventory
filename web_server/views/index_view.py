@@ -1,5 +1,5 @@
 import f90nml
-from flask import Blueprint, render_template, request
+from flask import Blueprint, Flask, render_template, request
 
 NML_PARAMS = (
     "frac_veic1",
@@ -46,9 +46,6 @@ NML_PARAMS = (
 
 
 class IndexView:
-    __index_page = Blueprint("index", __name__)
-
-    @__index_page.route("/", methods=["GET", "POST"])
     def index(self):
         if request.method == "GET":
             return render_template("index.html", params=NML_PARAMS)
@@ -75,6 +72,14 @@ class IndexView:
         window.location.replace("/")
         </script>"""
 
-    @__index_page.route("/sendfile", methods=["GET"])
     def send_file(self):
         return ""
+
+    def add_to(self, mod: Blueprint | Flask):
+        index_page = Blueprint("index", __name__)
+
+        index_page.add_url_rule("/", view_func=self.index, methods=["GET", "POST"])
+
+        index_page.add_url_rule("/sendfile", view_func=self.send_file, methods=["GET"])
+
+        mod.register_blueprint(index_page)
