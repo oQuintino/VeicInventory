@@ -12,8 +12,8 @@ def main():
 
     config = container.config
 
-    config.namelist_local_path.from_env("NAMELIST_LOCAL_PATH")
-    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH")
+    config.namelist_local_path.from_env("NAMELIST_LOCAL_PATH", required=True)
+    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
 
     config.hostname.from_env("SSH_HOST", required=True)
     config.username.from_env("SSH_USER", required=True)
