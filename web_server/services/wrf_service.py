@@ -1,28 +1,22 @@
-from os import PathLike
-from typing import NamedTuple
+from io import BytesIO
+from typing import NamedTuple, TextIO
 
 from paramiko import SFTPClient, Transport
 
 
-class NamelistFilePaths(NamedTuple):
-    local_path: PathLike[str]
-    remote_path: PathLike[str]
-
-
 class SFTPNamelistSender:
-    def __init__(self, namelist_paths: NamelistFilePaths):
-        self.__file_paths = namelist_paths
+    def __init__(self, stablished_protocol: Transport, namelist_file_bytes: BytesIO):
+        self.__protocol = stablished_protocol
+        self.__file_bytes = namelist_file_bytes
 
-    def send_namelist_through(self, a_stablished_protocol: Transport):
-        sftp_channel = SFTPClient.from_transport(a_stablished_protocol)
+    def send_namelist_to(self, a_remote_path: str):
+        sftp_channel = SFTPClient.from_transport(self.__protocol)
 
         if sftp_channel is None:
             raise Exception("Could not create the sftp channel")
 
-        namelist_to_send, its_remote_path = map(str, self.__file_paths)
-
         with sftp_channel:
-            sftp_channel.put(namelist_to_send, its_remote_path)
+            sftp_channel.putfo(self.__file_bytes, a_remote_path)
 
 
 class ConnectionSettings(NamedTuple):
@@ -32,11 +26,9 @@ class ConnectionSettings(NamedTuple):
 
 
 class SSHWRFService:
-    def __init__(
-        self, settings: ConnectionSettings, namelist_sender: SFTPNamelistSender
-    ):
+    def __init__(self, settings: ConnectionSettings, namelist_remote_path: str):
         self.__settings = settings
-        self.__sender = namelist_sender
+        self.__remote_path = namelist_remote_path
 
     def connect_to(self):
         hostname, username, password = self.__settings
@@ -50,4 +42,9 @@ class SSHWRFService:
         with Transport(hostname) as protocol:
             protocol.connect(username=username, password=password)
 
-            self.__sender.send_namelist_through(protocol)
+            sender = SFTPNamelistSender(
+                protocol,
+                BytesIO(b""),
+            )
+
+            sender.send_namelist_to(self.__remote_path)

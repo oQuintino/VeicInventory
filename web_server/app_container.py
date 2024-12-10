@@ -5,17 +5,6 @@ from services import wrf_service
 class InventoryAppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
 
-    namelist_paths = providers.Singleton(
-        wrf_service.NamelistFilePaths,
-        local_path=config.namelist_local_path,
-        remote_path=config.namelist_remote_path,
-    )
-
-    namelist_sender = providers.Singleton(
-        wrf_service.SFTPNamelistSender,
-        namelist_paths=namelist_paths,
-    )
-
     connection_settings = providers.Singleton(
         wrf_service.ConnectionSettings,
         hostname=config.hostname,
@@ -26,5 +15,5 @@ class InventoryAppContainer(containers.DeclarativeContainer):
     service = providers.Singleton(
         wrf_service.SSHWRFService,
         settings=connection_settings,
-        namelist_sender=namelist_sender,
+        namelist_remote_path=config.namelist_remote_path,
     )
