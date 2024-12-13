@@ -1,9 +1,11 @@
-from typing import TextIO
+from io import StringIO
+from types import MappingProxyType
 
 
-class NamelistCreator:
-    def __init__(self, namelist_file_name: str):
-        self.__name = namelist_file_name
 
-    def create_namelist(self) -> TextIO:
+class NamelistContentCreator:
+    def __init__(self, namelist_title: str):
+        self.__title = namelist_title
+
+    def create_namelist(self, namelist_data: MappingProxyType):
         raise NotImplementedError
