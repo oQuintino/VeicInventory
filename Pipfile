@@ -14,6 +14,7 @@ f90nml = "*"
 ruff = "*"
 bandit = "*"
 pytest = "*"
+f90nml = "*"
 
 [requires]
 python_version = "3.11"
