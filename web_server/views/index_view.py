@@ -67,11 +67,7 @@ class IndexView:
 
             return namelist_data
 
-        return """
-        <script>
-        alert("dados recebidos com sucesso")
-        window.location.replace("/")
-        </script>"""
+        return "O método não é permitido para a URL requisitada."
 
     def send_file(self):
         self.__service.connect_to()
