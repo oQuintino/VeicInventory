@@ -1,6 +1,5 @@
 import app_container
 from dotenv import load_dotenv
-from flask import Flask
 
 
 def main():
