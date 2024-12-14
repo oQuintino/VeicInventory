@@ -1,6 +1,7 @@
-import f90nml
+from types import MappingProxyType
+
 from flask import Blueprint, Flask, render_template, request
-from services import wrf_service
+from services import namelist_creator, wrf_service
 
 NML_PARAMS = (
     "frac_veic1",
@@ -47,23 +48,24 @@ NML_PARAMS = (
 
 
 class IndexView:
-    def __init__(self, wrf_service: wrf_service.SSHWRFService):
+    def __init__(
+        self,
+        wrf_service: wrf_service.SSHWRFService,
+        namelist_creator: namelist_creator.NamelistContentCreator,
+    ):
         self.__service = wrf_service
+        self.__creator = namelist_creator
 
     def index(self):
         if request.method == "GET":
             return render_template("index.html", params=NML_PARAMS)
 
         if request.method == "POST":
-            data = request.form.to_dict()
+            data_from_namelist_form = MappingProxyType(request.form)
 
-            for key, value in data.items():
-                data[key] = value if value.strip() else "0"
+            namelist_data = self.__creator.create_namelist(data_from_namelist_form)
 
-            namelist_group = {"emission_vehicles": data}
-
-            with open("namelist.emis", "w") as nml_file:
-                f90nml.write(namelist_group, nml_file)
+            return namelist_data
 
         return """
         <script>
