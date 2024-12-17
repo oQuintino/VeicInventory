@@ -77,11 +77,11 @@ class IndexView:
         alert("dados enviados")
         </script>"""
 
-    def add_to(self, mod: Blueprint | Flask):
+    def add_to(self):
         index_page = Blueprint("index", __name__)
 
         index_page.add_url_rule("/", view_func=self.index, methods=["GET", "POST"])
 
         index_page.add_url_rule("/sendfile", view_func=self.send_file, methods=["GET"])
 
-        mod.register_blueprint(index_page)
+        return index_page
