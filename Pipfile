@@ -8,12 +8,12 @@ flask = "*"
 python-dotenv = "*"
 paramiko = "*"
 dependency-injector = "*"
+f90nml = "*"
 
 [dev-packages]
 ruff = "*"
 bandit = "*"
 pytest = "*"
-f90nml = "*"
 
 [requires]
 python_version = "3.11"
