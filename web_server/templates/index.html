@@ -9,7 +9,7 @@
     <script src='main.js'></script>
 </head>
 <body>
-    <form action="#" method="post">
+  <form action="{{ url_for('index.send_file') }}" method="POST">
         {% block content %}
 
         {% for param in params %}
