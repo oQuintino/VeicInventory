@@ -1,6 +1,6 @@
 from types import MappingProxyType
 
-from flask import Blueprint, Flask, render_template, request
+from flask import Blueprint, render_template, request
 from services import namelist_creator, wrf_service
 
 NML_PARAMS = (
@@ -57,31 +57,22 @@ class IndexView:
         self.__creator = namelist_creator
 
     def index(self):
-        if request.method == "GET":
-            return render_template("index.html", params=NML_PARAMS)
-
-        if request.method == "POST":
-            data_from_namelist_form = MappingProxyType(request.form)
-
-            namelist_data = self.__creator.create_namelist(data_from_namelist_form)
-
-            return namelist_data
-
-        return "O método não é permitido para a URL requisitada."
+        return render_template("index.html", params=NML_PARAMS)
 
     def send_file(self):
+        data_from_namelist_form = MappingProxyType(request.form)
+
+        namelist_data = self.__creator.create_namelist(data_from_namelist_form)
+
         self.__service.connect_to()
 
-        return """
-        <script>
-        alert("dados enviados")
-        </script>"""
+        return namelist_data
 
-    def add_to(self, mod: Blueprint | Flask):
+    def add_to(self):
         index_page = Blueprint("index", __name__)
 
-        index_page.add_url_rule("/", view_func=self.index, methods=["GET", "POST"])
+        index_page.add_url_rule("/", view_func=self.index, methods=["GET"])
 
-        index_page.add_url_rule("/sendfile", view_func=self.send_file, methods=["GET"])
+        index_page.add_url_rule("/sendfile", view_func=self.send_file, methods=["POST"])
 
-        mod.register_blueprint(index_page)
+        return index_page
