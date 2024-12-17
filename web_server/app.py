@@ -1,5 +1,12 @@
 import app_container
 from dotenv import load_dotenv
+from flask import Flask
+from services import namelist_creator
+from views import index_view
+
+
+def request_method_error(error: Exception):
+    return str(error), 405
 
 
 def main():
@@ -21,6 +28,21 @@ def main():
     wrf = container.service()
 
     wrf.connect_to()
+
+    index = index_view.IndexView(
+        wrf,
+        namelist_creator.NamelistContentCreator("emission_vehicles"),
+    )
+
+    index_blueprint = index.add_to()
+
+    app = Flask(__name__)
+
+    app.register_blueprint(index_blueprint)
+
+    app.register_error_handler(405, request_method_error)
+
+    app.run()
 
 
 if __name__ == "__main__":
