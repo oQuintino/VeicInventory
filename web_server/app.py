@@ -25,12 +25,8 @@ def main():
     config.username.from_env("SSH_USER", required=True)
     config.password.from_env("SSH_PASS")
 
-    wrf = container.service()
-
-    wrf.connect_to()
-
     index = index_view.IndexView(
-        wrf,
+        container.service(),
         namelist_creator.NamelistContentCreator("emission_vehicles"),
     )
 
