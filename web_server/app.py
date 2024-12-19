@@ -12,16 +12,6 @@ def main():
 
     config = container.config
 
-    config.namelist_remote_path.from_env("NAMELIST_REMOTE_PATH", required=True)
-
-    config.hostname.from_env("SSH_HOST", required=True)
-    config.username.from_env("SSH_USER", required=True)
-    config.password.from_env("SSH_PASS")
-
-    wrf = container.service()
-
-    wrf.connect_to()
-
 
 if __name__ == "__main__":
     main()
