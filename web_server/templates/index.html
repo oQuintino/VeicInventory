@@ -29,25 +29,14 @@
         </select>
 
         <label for="subcategory">Subcategoria:</label>
-        <input type="text" name="subcategory[]" placeholder="Ex: SUV" required>
-      </div>
-
-      <div class="vehicle">
-        <label for="year">Ano:</label>
-        <input type="number" name="year[]" placeholder="Ex: 2024" required>
-
-        <label for="fuel">Tipo de Combustível:</label>
-        <select name="fuel[]" required>
-          <option value="">Selecione...</option>
-          <option value="Gasolina">Gasolina</option>
-          <option value="Álcool">Álcool</option>
-          <option value="Diesel">Diesel</option>
-          <option value="Elétrico">Elétrico</option>
-          <option value="Flex">Flex</option>
+        <select name="subcategory[]" required>
+          <option value="">Selecione a subcategoria de CNH...</option>
+          <option value="A">A - Motos, motonetas e triciclos</option>
+          <option value="B">B - Carros de passeio, utilitário/SUV, minivan, picape</option>
+          <option value="C">C - Caminhões, caminhonetes, vans de carga</option>
+          <option value="D">D - Ônibus, microônibus, vans de passageiros</option>
+          <option value="E">E - Veículos pesados</option>
         </select>
-
-        <label for="subcategory">Subcategoria:</label>
-        <input type="text" name="subcategory[]" placeholder="Ex: Hatch" required>
       </div>
 
       <button type="submit" class="btn" style="background-color: #28a745; margin-top: 10px;">Enviar</button>
