@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+import numpy as np
+from netCDF4 import Dataset
 import f90nml
 import os
 import paramiko
@@ -67,5 +69,53 @@ def send_file():
     print(output)
 
     return output
+
+@app.route("/get_netcdf_data", methods=['GET'])
+def get_netcdf_data():
+    from flask import jsonify
+    import numpy as np
+    from netCDF4 import Dataset
+
+    nc_file_path = "test/wrfout"
+    dataset = Dataset(nc_file_path, mode="r")
+
+    # Extract latitudes and longitudes
+    lats = dataset.variables["XLAT"][0, :, :]  # Assuming 3D and selecting the first time slice
+    lons = dataset.variables["XLONG"][0, :, :]  # Assuming 3D and selecting the first time slice
+
+    # Handle MaskedArrays
+    if isinstance(lats, np.ma.MaskedArray):
+        lats = lats.filled(np.nan)  # Replace masked values with NaN
+    if isinstance(lons, np.ma.MaskedArray):
+        lons = lons.filled(np.nan)  # Replace masked values with NaN
+
+    # Extract time and CO2_ANT data
+    times = dataset.variables["XTIME"][:]  # Assuming time is not masked
+    co2_ant = np.array(dataset.variables["CO2_ANT"][:])  # Convert to NumPy array
+
+    # Handle MaskedArrays for CO2_ANT
+    if isinstance(co2_ant, np.ma.MaskedArray):
+        co2_ant = co2_ant.filled(np.nan)  # Replace masked values with NaN
+
+    # Create frames for CO2_ANT
+    co2_ant_frames = []
+    for t in range(co2_ant.shape[0]):  # Iterate over the time dimension
+        co2_ant_frames.append(co2_ant[t, 0, :, :].tolist())  # Assuming bottom_top=0 for simplicity
+
+    # Close the dataset
+    dataset.close()
+
+    # Prepare and return JSON response
+    return jsonify({
+        "lats": lats.tolist(),
+        "lons": lons.tolist(),
+        "time": times.tolist(),  # Match variable name to the JS code
+        "frames": co2_ant_frames
+    })
+
+
+@app.route("/render_results", methods=['GET'])
+def render_results():
+    return render_template("render_plot.html")
 
 app.run(debug=True)

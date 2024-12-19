@@ -2,3 +2,4 @@ flask
 paramiko
 python-dotenv
 f90nml
+netCDF4
