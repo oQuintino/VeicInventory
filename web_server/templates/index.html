@@ -17,8 +17,53 @@
       <input type="text" name={{param}}><br>
       {% endfor %}
 
-        {% endblock %}
-        <button>Submit</button>
+      {% endblock %}
+      <button>Submit</button>
+  </form>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Informações dos Veículos</h1>
+    <form>
+      <div class="vehicle">
+        <label for="year">Ano:</label>
+        <input type="number" name="year[]" placeholder="Ex: 2024" required>
+
+        <label for="fuel">Tipo de Combustível:</label>
+        <select name="fuel[]" required>
+          <option value="">Selecione...</option>
+          <option value="Gasolina">Gasolina</option>
+          <option value="Álcool">Álcool</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Elétrico">Elétrico</option>
+          <option value="Flex">Flex</option>
+        </select>
+
+        <label for="subcategory">Subcategoria:</label>
+        <input type="text" name="subcategory[]" placeholder="Ex: SUV" required>
+      </div>
+
+      <div class="vehicle">
+        <label for="year">Ano:</label>
+        <input type="number" name="year[]" placeholder="Ex: 2024" required>
+
+        <label for="fuel">Tipo de Combustível:</label>
+        <select name="fuel[]" required>
+          <option value="">Selecione...</option>
+          <option value="Gasolina">Gasolina</option>
+          <option value="Álcool">Álcool</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Elétrico">Elétrico</option>
+          <option value="Flex">Flex</option>
+        </select>
+
+        <label for="subcategory">Subcategoria:</label>
+        <input type="text" name="subcategory[]" placeholder="Ex: Hatch" required>
+      </div>
+
+      <button type="submit" class="btn" style="background-color: #28a745; margin-top: 10px;">Enviar</button>
     </form>
+  </div>
 </body>
 </html>
